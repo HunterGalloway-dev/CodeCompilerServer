@@ -1,0 +1,14 @@
+{
+    "studentID": "419240",
+    "language": "java",
+    "mainFileIndex": 0,
+    "files": [
+        {
+            "fileName": "Main.java",
+            "fileContent": "public class Main {public static void main(String[] args) {System.out.println(\"tits\");}}"
+        }
+    ],
+    "testInput": [
+        
+    ]
+}
