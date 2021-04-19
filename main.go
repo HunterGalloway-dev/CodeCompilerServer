@@ -9,6 +9,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+
+	"github.com/gorilla/mux"
 	//"encoding/json"
 )
 
@@ -76,14 +78,14 @@ func check(e error) {
 }
 
 func main() {
-	// r := mux.NewRouter()
+	r := mux.NewRouter()
 
-	// // IMPORTANT: you must specify an OPTIONS method matcher for the middleware to set CORS headers
-	// r.HandleFunc("/foo", fooHandler).Methods(http.MethodPost, http.MethodPatch, http.MethodOptions)
-	// r.Use(mux.CORSMethodMiddleware(r))
+	// IMPORTANT: you must specify an OPTIONS method matcher for the middleware to set CORS headers
+	r.HandleFunc("/foo", fooHandler).Methods(http.MethodPost, http.MethodPatch, http.MethodOptions)
+	r.Use(mux.CORSMethodMiddleware(r))
 
-	// http.ListenAndServe(":8080", r)
-	// fmt.Println("Starting server...")
+	http.ListenAndServe(":8080", r)
+	fmt.Println("Starting server...")
 
 	x := []File{
 		{
@@ -116,26 +118,26 @@ func fooHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	reqBody, _ := ioutil.ReadAll(r.Body)
-	// var receivedPacket Packet
-	// json.Unmarshal(reqBody, &receivedPacket)
-	// //codeOutput := runCode(receivedPacket)
+	var receivedPacket Packet
+	json.Unmarshal(reqBody, &receivedPacket)
+	codeOutput := runCode(receivedPacket)
 
-	// fmt.Println(reqBody)
+	fmt.Println(reqBody)
 
 	var runConfig RunConfig
 	json.Unmarshal(reqBody, &runConfig)
 	fmt.Println("Test: ", runConfig)
 
-	// sendPacket := Output{
-	// 	Output: codeOutput,
-	// }
+	sendPacket := Output{
+		Output: codeOutput,
+	}
 
-	// fmt.Println(sendPacket)
+	fmt.Println(sendPacket)
 
-	// marshalledOutput, err := json.Marshal(sendPacket)
-	// check(err)
+	marshalledOutput, err := json.Marshal(sendPacket)
+	check(err)
 
-	// fmt.Println(string(marshalledOutput))
+	fmt.Println(string(marshalledOutput))
 
-	// w.Write(marshalledOutput)
+	w.Write(marshalledOutput)
 }
